@@ -1,30 +1,25 @@
-# React + TypeScript + Vite
+# CodeLib
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Example application for an e-commerce site with functional Frontend + Backend with theme selection, user management and order cart management.
 
-Currently, two official plugins are available:
+## Technologies overview:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Developed using:
 
-## Expanding the ESLint configuration
+- Generated with [Vite](https://vitejs.dev/) using [React + TypeScript Template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts)
+- React - [https://react.dev/](https://react.dev/)
+- Tailwind CSS - [https://tailwindcss.com/](https://tailwindcss.com/)
+- Typescript - [https://www.typescriptlang.org/](https://www.typescriptlang.org/)
+- React Router - [https://reactrouter.com/en/main](https://reactrouter.com/en/main)
+- JSONServer - [JSON Server Stable Github Page](https://github.com/typicode/json-server/tree/v0?tab=readme-ov-file#json-server-) using [JSON Server Auth](https://www.npmjs.com/package/json-server-auth) for authentication and route protection
+- Netlify - [https://app.netlify.com/](https://app.netlify.com/) for frontend deployment 
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## Dependencies
 
-- Configure the top-level `parserOptions` property like this:
+- CodeLib Mock Server - [codelib-mock-server](https://github.com/vicrodri/codelib-mock-server) backend server
+  
+## How to run
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
-
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+- npm run dev: Launches frontend dev server + watch for changes
+- npm run jsonserve: Launches local JSON Server + JSON Server Auth with their files linked and watching for changes
+- npm run build: generate code bundle to /build directory
