@@ -12,7 +12,7 @@ export const Login = () => {
   const navigate = useNavigate();
   const disabled = useMemo(() => {
     return email == null || email === "" || password == null || password === "" ? true : false;
-  }, [name, email, password]);
+  }, [email, password]);
 
   const handleLogin = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -40,7 +40,7 @@ export const Login = () => {
           Login
         </p>
       </section>
-      <form onSubmit={handleLogin}>
+      <form onSubmit={(event: FormEvent<HTMLFormElement>) => void handleLogin(event)}>
         <div className='mb-6'>
           <label htmlFor='email' className='block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300'>
             Your email
@@ -49,7 +49,7 @@ export const Login = () => {
             type='email'
             id='email'
             className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
-            placeholder='shubham@example.com'
+            placeholder='my@mail.com'
             required
             autoComplete='off'
             value={email}

@@ -2,8 +2,8 @@ export class AppError extends Error {
   statusCode: number;
 
   constructor(statusCode: number, message: string) {
-    super(message); // call the parent constructor
-    this.name = "CustomError"; // set the name property
+    super(message);
+    this.name = "AppError";
     this.statusCode = statusCode;
   }
 

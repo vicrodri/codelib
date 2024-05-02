@@ -1,4 +1,5 @@
 import { ApiAuthResponse, AppError, AuthDetail, RequestOptions } from "../model";
+import { AuthResponse } from "../model/ApiResponse";
 import { buildApiUrl, setSessionStorageItem } from "../utils/Utils";
 
 export const login = async (authDetail: AuthDetail): Promise<ApiAuthResponse> => {
@@ -44,12 +45,12 @@ const sendAuthRequest = async (url: string, requestOptions: RequestOptions) => {
   if (!response.ok) {
     throw new AppError(response.status, response.statusText);
   }
-  const data = await response.json();
+  const data: AuthResponse | string = (await response.json()) as AuthResponse | string;
 
   const result: ApiAuthResponse = {
-    code: response.status as number,
-    response: data.accessToken ? data : null,
-    message: !data.accessToken ? data : null,
+    code: response.status,
+    response: typeof data !== "string" ? data : null,
+    message: typeof data === "string" ? data : null,
   };
 
   return result;

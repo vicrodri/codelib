@@ -10,6 +10,12 @@ interface CheckoutProps {
   hideCheckout(): void;
 }
 
+export interface NavState {
+  data?: Order;
+  status: boolean;
+  error?: Error;
+}
+
 const emptyUser: User = { name: "", email: "", id: 0 };
 
 export const Checkout: FC<CheckoutProps> = ({ hideCheckout }: CheckoutProps) => {
@@ -47,9 +53,9 @@ export const Checkout: FC<CheckoutProps> = ({ hideCheckout }: CheckoutProps) => 
     try {
       const data: ApiOrderResponse = await createOrder(order);
       clearCart();
-      navigate("/order-summary", { state: { data: data.response?.orderList[0], status: true } });
+      navigate("/order-summary", { state: { data: data.response?.orders[0], status: true } as NavState });
     } catch (error) {
-      navigate("/order-summary", { state: { error: error, status: false } });
+      navigate("/order-summary", { state: { error: error, status: false } as NavState });
     }
   };
 
@@ -90,7 +96,7 @@ export const Checkout: FC<CheckoutProps> = ({ hideCheckout }: CheckoutProps) => 
               <h3 className='mb-4 text-xl font-medium text-gray-900 dark:text-white'>
                 <i className='bi bi-credit-card mr-2'></i>CARD PAYMENT
               </h3>
-              <form className='space-y-6' onSubmit={handleSubmit}>
+              <form className='space-y-6' onSubmit={(event: FormEvent<HTMLFormElement>) => void handleSubmit(event)}>
                 <div>
                   <label htmlFor='name' className='block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300'>
                     Name:

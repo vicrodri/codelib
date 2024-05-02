@@ -27,8 +27,8 @@ export interface Filter {
   productList?: Product[];
   onlyInStock?: boolean;
   bestSellerOnly?: boolean;
-  sortBy?: any;
-  ratings?: any;
+  sortBy?: SortingType;
+  ratings?: Rating_Filter;
   setInitialProductList?(data: object): void;
 }
 
@@ -57,25 +57,31 @@ export enum Rating_Filter {
 
 export interface FilterAction {
   type: FilterActionType;
-  payload: any;
+  payload?: Partial<Filter>;
 }
 
-export const filterReducer = (state: Filter, action: FilterAction) => {
+export const filterReducer = (state: Filter, action: FilterAction): Filter => {
   const { type, payload } = action;
 
   switch (type) {
     case FilterActionType.PRODUCT_LIST:
-      return { ...state, productList: payload.productList };
+      return { ...state, productList: payload?.productList };
     case FilterActionType.SORT_BY:
-      return { ...state, sortBy: payload.sortBy };
+      return { ...state, sortBy: payload?.sortBy };
     case FilterActionType.RATINGS:
-      return { ...state, ratings: payload.ratings };
+      return { ...state, ratings: payload?.ratings };
     case FilterActionType.BEST_SELLER_ONLY:
-      return { ...state, bestSellerOnly: payload.bestSellerOnly };
+      return { ...state, bestSellerOnly: payload?.bestSellerOnly };
     case FilterActionType.IN_STOCK_ONLY:
-      return { ...state, onlyInStock: payload.onlyInStock };
+      return { ...state, onlyInStock: payload?.onlyInStock };
     case FilterActionType.CLEAR:
-      return { ...state, onlyInStock: false, bestSellerOnly: false, sortBy: null, ratings: null };
+      return {
+        ...state,
+        onlyInStock: false,
+        bestSellerOnly: false,
+        sortBy: SortingType.DEFAULT,
+        ratings: Rating_Filter.DEFAULT,
+      };
     default:
       throw new Error("Type not found");
   }
@@ -85,14 +91,14 @@ export const filterReducer = (state: Filter, action: FilterAction) => {
 export interface Cart {
   productList: Product[];
   total: number;
-  addToCart(data: object): void;
-  removeFromCart(data: object): void;
-  clearCart(): void;
+  addToCart: (data: Product) => void;
+  removeFromCart: (data: Product) => void;
+  clearCart: () => void;
 }
 
 export interface CartAction {
   type: CartActionType;
-  payload?: any;
+  payload: Partial<Cart>;
 }
 
 export enum CartActionType {
@@ -101,14 +107,14 @@ export enum CartActionType {
   CLEAR = "CLEAR_CART",
 }
 
-export const cartReducer = (state: Cart, action: CartAction) => {
+export const cartReducer = (state: Cart, action: CartAction): Cart => {
   const { type, payload } = action;
 
   switch (type) {
     case CartActionType.ADD:
-      return { ...state, productList: payload.productList, total: payload.total };
+      return { ...state, productList: payload.productList!, total: payload.total! };
     case CartActionType.REMOVE:
-      return { ...state, productList: payload.productList, total: payload.total };
+      return { ...state, productList: payload.productList!, total: payload.total! };
     case CartActionType.CLEAR:
       return { ...state, productList: [], total: 0 };
     default:

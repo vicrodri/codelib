@@ -7,28 +7,29 @@ export const getProductList = async (criteria: string): Promise<ApiProductRespon
   if (!response.ok) {
     throw new AppError(response.status, response.statusText);
   }
-  const data = await response.json();
+  const data: Product[] = (await response.json()) as Product[];
 
   const apiResponse: ApiProductResponse = {
     code: response.status,
     response: {
-      productList: data.length
-        ? data.map((item: Product) => ({
-            id: item.id,
-            best_seller: item.best_seller,
-            in_stock: item.in_stock,
-            name: item.name,
-            overview: item.overview,
-            image_local: item.image_local,
-            long_description: item.long_description,
-            poster: item.poster,
-            price: item.price,
-            rating: item.rating,
-            size: item.size,
-          }))
-        : [],
+      products:
+        typeof data !== "string"
+          ? data.map((item: Product) => ({
+              id: item.id,
+              best_seller: item.best_seller,
+              in_stock: item.in_stock,
+              name: item.name,
+              overview: item.overview,
+              image_local: item.image_local,
+              long_description: item.long_description,
+              poster: item.poster,
+              price: item.price,
+              rating: item.rating,
+              size: item.size,
+            }))
+          : [],
     },
-    message: !data.length ? data : null,
+    message: typeof data === "string" ? data : null,
   };
 
   return apiResponse;
@@ -40,11 +41,11 @@ export const getProduct = async (id: string): Promise<ApiProductResponse> => {
   if (!response.ok) {
     throw new AppError(response.status, response.statusText);
   }
-  const data = await response.json();
+  const data: Product = (await response.json()) as Product;
   const apiResponse: ApiProductResponse = {
     code: response.status,
     response: {
-      productList: [
+      products: [
         {
           id: data.id,
           best_seller: data.best_seller,
@@ -60,7 +61,7 @@ export const getProduct = async (id: string): Promise<ApiProductResponse> => {
         },
       ],
     },
-    message: !data.id ? data : null,
+    message: typeof data === "string" ? data : null,
   };
   return apiResponse;
 };
@@ -71,28 +72,29 @@ export const getFeaturedProductList = async () => {
   if (!response.ok) {
     throw new AppError(response.status, response.statusText);
   }
-  const data = await response.json();
+  const data: Product[] = (await response.json()) as Product[];
 
   const apiResponse: ApiProductResponse = {
     code: response.status,
     response: {
-      productList: data.length
-        ? data.map((item: Product) => ({
-            id: item.id,
-            best_seller: item.best_seller,
-            in_stock: item.in_stock,
-            name: item.name,
-            overview: item.overview,
-            image_local: item.image_local,
-            long_description: item.long_description,
-            poster: item.poster,
-            price: item.price,
-            rating: item.rating,
-            size: item.size,
-          }))
-        : [],
+      products:
+        typeof data !== "string"
+          ? data.map((item: Product) => ({
+              id: item.id,
+              best_seller: item.best_seller,
+              in_stock: item.in_stock,
+              name: item.name,
+              overview: item.overview,
+              image_local: item.image_local,
+              long_description: item.long_description,
+              poster: item.poster,
+              price: item.price,
+              rating: item.rating,
+              size: item.size,
+            }))
+          : [],
     },
-    message: !data.length ? data : null,
+    message: typeof data === "string" ? data : null,
   };
 
   return apiResponse;

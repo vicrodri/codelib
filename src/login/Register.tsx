@@ -44,7 +44,7 @@ export const Register = () => {
           Register
         </p>
       </section>
-      <form onSubmit={handleRegister}>
+      <form onSubmit={(event: FormEvent<HTMLFormElement>) => void handleRegister(event)}>
         <div className='mb-6'>
           <label htmlFor='name' className='block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300'>
             Your name
