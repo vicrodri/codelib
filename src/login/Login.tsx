@@ -10,18 +10,12 @@ export const Login = () => {
   const [password, setPassword] = useState<string>("");
 
   const navigate = useNavigate();
+
   const disabled = useMemo(() => {
     return email == null || email === "" || password == null || password === "" ? true : false;
   }, [email, password]);
 
-  const handleLogin = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    const authDetail: AuthDetail = {
-      email: email,
-      password: password,
-    };
-
+  const logUserIn = async (authDetail: AuthDetail) => {
     try {
       const data: ApiAuthResponse = await login(authDetail);
       data.response?.accessToken ? navigate("/products") : toast.error(data.message);
@@ -30,6 +24,25 @@ export const Login = () => {
         ? toast.error(error.message)
         : toast.error("Sorry Failed to connect!", { closeButton: true, autoClose: 10000, position: "top-center" });
     }
+  };
+  const handleLogin = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const authDetail: AuthDetail = {
+      email: email,
+      password: password,
+    };
+
+    await logUserIn(authDetail);
+  };
+
+  const handleGuestLogin = async () => {
+    const authDetail: AuthDetail = {
+      email: `${import.meta.env.VITE_GUEST_USER}`,
+      password: `${import.meta.env.VITE_GUEST_PWD}`,
+    };
+
+    await logUserIn(authDetail);
   };
 
   useTitle("Login");
@@ -77,7 +90,12 @@ export const Login = () => {
           Log In
         </button>
       </form>
-      {/* <button className="mt-3 cursor-pointer text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-3 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Login As Guest</button> */}
+      <button
+        onClick={() => void handleGuestLogin()}
+        className='mt-3 cursor-pointer text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-3 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
+      >
+        Login As Guest
+      </button>
     </main>
   );
 };
