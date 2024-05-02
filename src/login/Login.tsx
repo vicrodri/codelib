@@ -38,8 +38,8 @@ export const Login = () => {
 
   const handleGuestLogin = async () => {
     const authDetail: AuthDetail = {
-      email: "guest@mail.com",
-      password: "invitado",
+      email: `${import.meta.env.VITE_GUEST_USER}`,
+      password: `${import.meta.env.VITE_GUEST_PWD}`,
     };
 
     await logUserIn(authDetail);
