@@ -270,6 +270,12 @@
       "password": "$2a$10$bM.D9AINsVYr9RFMkk.gNuMxduJDRI0wDR7C8dDiTF4nZQ95Fr/Bq",
       "name": "nombre",
       "id": 1
+    },
+    {
+      "email": "guest@mail.com",
+      "password": "$2a$10$c/L/K9/jlXzAVwGEgV6wc.fsIyVpfczuCHdgpyp93ip4IFTt7Ws7q",
+      "name": "Guest",
+      "id": 2
     }
   ]
 }
