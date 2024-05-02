@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from "react";
-import { AppError, Product } from "../model";
+import { ApiProductResponse, AppError, Product } from "../model";
 import { Rating } from "../common";
 import { useParams } from "react-router-dom";
 import { useTitle } from "../utils/useTitle";
@@ -7,8 +7,22 @@ import { useCart } from "../context";
 import { getProduct } from "../services";
 import { toast } from "react-toastify";
 
+const emptyProduct: Product = {
+  id: 0,
+  name: "",
+  best_seller: false,
+  in_stock: false,
+  image_local: "",
+  poster: "",
+  long_description: "",
+  overview: "",
+  price: 0,
+  rating: 0,
+  size: 0,
+};
+
 export const ProductDetail: FC = () => {
-  const [product, setProduct] = useState<Partial<Product>>({});
+  const [product, setProduct] = useState<Product>(emptyProduct);
   const [inCart, isInCart] = useState<boolean>(false);
   const { id } = useParams();
   const { productList, addToCart, removeFromCart } = useCart();
@@ -24,8 +38,8 @@ export const ProductDetail: FC = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const data = await getProduct(id || "0");
-        data.response?.productList ? setProduct(data.response?.productList[0]) : toast.error(data.message);
+        const data: ApiProductResponse = await getProduct(id ?? "0");
+        data.response?.products ? setProduct(data.response?.products[0]) : toast.error(data.message);
       } catch (error) {
         error instanceof AppError
           ? toast.error(error.message)
@@ -33,7 +47,7 @@ export const ProductDetail: FC = () => {
       }
     };
     void fetchProduct();
-  }, []);
+  }, [id]);
 
   useEffect(() => {
     const localProduct = productList.find((item) => item.id === product.id);

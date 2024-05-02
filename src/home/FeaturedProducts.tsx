@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from "react";
 import { Card } from "../common";
-import { AppError, Product } from "../model";
+import { ApiProductResponse, AppError, Product } from "../model";
 import { getFeaturedProductList } from "../services";
 import { toast } from "react-toastify";
 
@@ -10,8 +10,8 @@ export const FeaturedProducts: FC = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const data = await getFeaturedProductList();
-        data.response ? setFeaturedProducts(data.response.productList) : toast.error(data.message);
+        const data: ApiProductResponse = await getFeaturedProductList();
+        data.response ? setFeaturedProducts(data.response.products) : toast.error(data.message);
       } catch (error) {
         error instanceof AppError
           ? toast.error(error.message)

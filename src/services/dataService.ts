@@ -1,30 +1,31 @@
-import { ApiOrderResponse, ApiUserResponse, AppError, Order, RequestOptions } from "../model";
+import { ApiOrderResponse, ApiUserResponse, AppError, Order, RequestOptions, User } from "../model";
 import { buildApiUrl, getSessionStorageItem } from "../utils/Utils";
 
 export const getUser = async (): Promise<ApiUserResponse> => {
   const requestOptions: RequestOptions = {
     method: "GET",
-    headers: { "content-type": "application/json", Authorization: `Bearer ${getSessionStorageItem("token")}` },
+    headers: { "content-type": "application/json", Authorization: `Bearer ${getSessionStorageItem<string>("token")}` },
   };
-  const url = buildApiUrl(`600/users/${getSessionStorageItem("cbid")}`);
+  const url = buildApiUrl(`600/users/${getSessionStorageItem<number>("cbid")}`);
   const response = await fetch(url, requestOptions);
   if (!response.ok) {
     throw new AppError(response.status, response.statusText);
   }
-  const data = await response.json();
+  const data: User = (await response.json()) as User;
 
   const apiResponse: ApiUserResponse = {
     code: response.status,
-    response: data.id
-      ? {
-          user: {
-            name: data.name,
-            email: data.email,
-            id: data.id,
-          },
-        }
-      : {},
-    message: !data.id ? data : null,
+    response:
+      typeof data !== "string"
+        ? {
+            user: {
+              name: data.name,
+              email: data.email,
+              id: data.id,
+            },
+          }
+        : null,
+    message: typeof data === "string" ? data : null,
   };
 
   return apiResponse;
@@ -33,28 +34,29 @@ export const getUser = async (): Promise<ApiUserResponse> => {
 export const getUserOrders = async () => {
   const requestOptions: RequestOptions = {
     method: "GET",
-    headers: { "content-type": "application/json", Authorization: `Bearer ${getSessionStorageItem("token")}` },
+    headers: { "content-type": "application/json", Authorization: `Bearer ${getSessionStorageItem<string>("token")}` },
   };
-  const url = buildApiUrl(`660/orders?user.id=${getSessionStorageItem("cbid")}`);
+  const url = buildApiUrl(`660/orders?user.id=${getSessionStorageItem<number>("cbid")}`);
   const response = await fetch(url, requestOptions);
   if (!response.ok) {
     throw new AppError(response.status, response.statusText);
   }
-  const data = await response.json();
+  const data: Order[] = (await response.json()) as Order[];
   const apiResponse: ApiOrderResponse = {
     code: response.status,
     response: {
-      orderList: data.length
-        ? data.map((item: Order) => ({
-            id: item.id,
-            quantity: item.quantity,
-            amount_paid: item.amount_paid,
-            user: item.user,
-            productList: item.productList,
-          }))
-        : [],
+      orders:
+        typeof data !== "string"
+          ? data.map((item: Order) => ({
+              id: item.id,
+              quantity: item.quantity,
+              amount_paid: item.amount_paid,
+              user: item.user,
+              productList: item.productList,
+            }))
+          : [],
     },
-    message: !data.length ? data : null,
+    message: typeof data === "string" ? data : null,
   };
   return apiResponse;
 };
@@ -62,7 +64,7 @@ export const getUserOrders = async () => {
 export const createOrder = async (order: Order): Promise<ApiOrderResponse> => {
   const requestOptions: RequestOptions = {
     method: "POST",
-    headers: { "content-type": "application/json", Authorization: `Bearer ${getSessionStorageItem("token")}` },
+    headers: { "content-type": "application/json", Authorization: `Bearer ${getSessionStorageItem<string>("token")}` },
     body: JSON.stringify(order),
   };
   const url = buildApiUrl(`660/orders`);
@@ -70,12 +72,12 @@ export const createOrder = async (order: Order): Promise<ApiOrderResponse> => {
   if (!response.ok) {
     throw new AppError(response.status, response.statusText);
   }
-  const data = await response.json();
+  const data: Order = (await response.json()) as Order;
 
   const apiResponse: ApiOrderResponse = {
     code: response.status,
     response: {
-      orderList: [
+      orders: [
         {
           id: data.id,
           quantity: data.quantity,
@@ -85,7 +87,7 @@ export const createOrder = async (order: Order): Promise<ApiOrderResponse> => {
         },
       ],
     },
-    message: !data.id ? data : null,
+    message: typeof data === "string" ? data : null,
   };
 
   return apiResponse;

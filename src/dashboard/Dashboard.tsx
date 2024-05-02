@@ -5,7 +5,7 @@ import { Order } from "../model/Order";
 import { getUserOrders } from "../services";
 import { toast } from "react-toastify";
 import { useTitle } from "../utils/useTitle";
-import { AppError } from "../model";
+import { ApiOrderResponse, AppError } from "../model";
 
 export const Dashboard: FC = () => {
   const [orderList, setOrderList] = useState<Order[]>([]);
@@ -13,8 +13,8 @@ export const Dashboard: FC = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const data = await getUserOrders();
-        data.response ? setOrderList(data.response.orderList) : toast.error(data.message);
+        const data: ApiOrderResponse = await getUserOrders();
+        data.response ? setOrderList(data.response.orders) : toast.error(data.message);
       } catch (error) {
         error instanceof AppError
           ? toast.error(error.message)

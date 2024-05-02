@@ -2,43 +2,43 @@ import { Order } from "./Order";
 import { Product } from "./Product";
 import { User } from "./User";
 
-interface AuthResponse {
+export interface AuthResponse {
   accessToken: string;
   user: User;
 }
 
-export type ApiAuthResponse = {
+export interface ApiAuthResponse {
   code: number;
-  response?: AuthResponse;
-  message?: string;
-};
+  response?: AuthResponse | null;
+  message?: string | null;
+}
 
-interface UserResponse {
+export interface UserResponse {
   user?: User;
 }
 
-interface OrderResponse {
-  orderList: Order[];
+export interface OrderResponse {
+  orders: Order[];
 }
 
-export type ApiUserResponse = {
+export interface ApiUserResponse {
   code: number;
-  response?: UserResponse;
-  message?: string;
-};
+  response?: UserResponse | null;
+  message?: string | null;
+}
 
-export type ApiOrderResponse = {
+export interface ApiOrderResponse {
   code: number;
   response?: OrderResponse;
-  message?: string;
-};
-
-interface ProductResponse {
-  productList: Product[];
+  message?: string | null;
 }
 
-export type ApiProductResponse = {
+interface ProductResponse {
+  products: Product[];
+}
+
+export interface ApiProductResponse {
   code: number;
   response?: ProductResponse;
-  message?: string;
-};
+  message?: string | null;
+}

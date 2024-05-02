@@ -7,7 +7,8 @@ export const Search: FC = () => {
 
   const handleSearch = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const queryTerm: string = searchBox.current?.value as string;
+    const queryTerm: string | undefined = searchBox.current?.value;
+    console.log("busco", queryTerm);
     event.currentTarget.reset();
 
     navigate(`/products?q=${queryTerm}`);
