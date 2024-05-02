@@ -7,7 +7,7 @@ interface ratingProps {
 export const Rating: FC<ratingProps> = (props: ratingProps) => {
   const ratingArray: boolean[] = Array(5)
     .fill(false)
-    .map((item, index) => (index < props.rating ? (item = true) : (item = false)));
+    .map((_, index) => (index < props.rating ? true : false));
 
   return (
     <>
